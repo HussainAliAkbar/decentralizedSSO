@@ -13,7 +13,7 @@ let config = convict({
   port: {
     docs: 'Default port on which the app runs',
     format: 'port',
-    default: 3000
+    default: 4000
   },
   isReqResLogEnabled: {
     docs: 'Request / Response logger bit',
@@ -32,7 +32,7 @@ let config = convict({
 // Get config according to current environment
 let env = config.get('env');
 
-config.loadFile(path.resolve(`${__dirname }/env/${env}.json`));
+config.loadFile(path.resolve(`${__dirname}/env/${env}.json`));
 
 // Validate config
 config.validate({ strict: true });
