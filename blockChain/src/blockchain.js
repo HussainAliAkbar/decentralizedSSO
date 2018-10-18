@@ -3,7 +3,7 @@ const axios = require('axios');
 const _ = require('lodash');
 const utils = require('./utils');
 
-module.exports = class Blockchain {
+class Blockchain {
   constructor () {
     this.chain = [];
     this.currentTransactions = [];
@@ -36,7 +36,7 @@ module.exports = class Blockchain {
       //  This way, proofs of work can not be recycled on other chains.
       // for reference: https://medium.com/@schubert.konstantin/isnt-there-a-msitake-with-your-proof-of-work-30cf9467f0a5
 
-      let lastProof =lastBlock['proof'] + lastBlock['previousHash'];
+      let lastProof = lastBlock['proof'] + lastBlock['previousHash'];
       if (!this.validProof(lastProof, block['proof'])) {
         return false;
       }
@@ -149,3 +149,10 @@ module.exports = class Blockchain {
     return guess.substr(guess.length - 2) === '00'; // 2 is the difficulty
   }
 };
+
+// instantiate a new blockchain
+let blockChain = new Blockchain();
+
+// genesis block
+blockChain.newBlock(100, 1);
+module.exports = blockChain;
