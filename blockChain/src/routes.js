@@ -18,6 +18,9 @@ function setupRoutes (app) {
 
   // resolve conflicts in the chain by coming to a consensus
   app.get('/nodes/resolve', services.resolveConflict);
+
+  // verify that a transaction exists on the blockChain or not
+  app.post('/verify-transaction', services.verifyTransaction);
 }
 
 module.exports = setupRoutes;

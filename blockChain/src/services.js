@@ -106,11 +106,33 @@ async function resolveConflict (req, res) {
   }
 }
 
+function verifyTransaction(req, res, next) {
+  const requiredFields = ['publicKey', 'encryptedData'];
+  let throwError = false;
+  requiredFields.forEach(field => {
+    if (!req.body[field] && req.body[field] !== false) {
+      throwError = true;
+    }
+  });
+  if (throwError) {
+    res.status(400);
+    return res.send({ message: 'required fields missing' });
+  }
+
+  let transaction = blockChain.fetchTransactionFromChain(req.body.publicKey);
+  if (transaction && transaction.encryptedData === req.body.encryptedData) {
+    res.send({message: true});
+  } else {
+    res.send({message: false});
+  }
+}
+
 module.exports = {
   mineBlock,
   addNewTransaction,
   getChain,
   registerNewNode,
   resolveConflict,
-  getPendingTransactions
+  getPendingTransactions,
+  verifyTransaction
 };
