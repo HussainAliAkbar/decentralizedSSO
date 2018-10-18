@@ -14,3 +14,6 @@ const nodeIdentifier = uuidv4();
 app.use(formatter.formatResponse);
 app.listen(process.env.PORT, () => console.log('app listening on port: ', process.env.PORT, ', identifier: ', nodeIdentifier));
 routes(app);
+
+// TODO: 1. implement mining after each transaction for simplification
+// TODO: 2. verify data api call

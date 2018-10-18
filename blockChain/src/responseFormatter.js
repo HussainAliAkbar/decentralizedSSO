@@ -16,12 +16,12 @@ function formatResponse (req, res, next) {
     res.json = jsonResponse;
     if (data.meta) {
       if (!data.meta.code) {
-        data.meta.code = data.statusCode || statusCode;
+        data.meta.code = data.statusCode || res.statusCode || statusCode;
       }
     } else {
       data = {
         meta: {
-          code: data.statusCode || statusCode
+          code: data.statusCode || res.statusCode || statusCode
         },
         data: data
       };

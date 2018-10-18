@@ -98,24 +98,22 @@ class Blockchain {
     return block;
   }
 
-  newTransaction (sender, receiver, amount) {
+  newTransaction (publicKey, encryptedData) {
     this.currentTransactions.push({
-      sender,
-      receiver,
-      amount
+      publicKey,
+      encryptedData
     });
     return this.lastBlock()['index'] + 1;
   }
 
-  async broadcastTransaction (sender, receiver, amount) {
+  async broadcastTransaction (publicKey, encryptedData) {
     console.log('broadcasting transactions');
     let neighbours = this.nodes;
     let promises = [];
     for (let i = 0; i < neighbours.length; i++) {
       promises.push(axios.post(`http://${neighbours[i]}/transactions/new`, {
-        sender,
-        receiver,
-        amount,
+        publicKey,
+        encryptedData,
         broadcast: false
       }));
     }
@@ -148,7 +146,31 @@ class Blockchain {
     let guess = SHA256(lastProof.toString() + proof.toString()).toString();
     return guess.substr(guess.length - 2) === '00'; // 2 is the difficulty
   }
-};
+
+  fetchTransactionFromChain (identifier) {
+    let chain = this.chain;
+    let resp = undefined;
+    chain.forEach(block => {
+      block.transactions.forEach(transaction => {
+        if (transaction.publicKey === identifier) {
+          resp = transaction;
+        }
+      });
+    });
+    return resp;
+  }
+
+  fetchTransactionFromPendingTransactions (identifier) {
+    let currentTransactions = this.currentTransactions;
+    let resp = undefined;
+    currentTransactions.forEach(transaction => {
+      if (transaction.publicKey === identifier) {
+        resp = transaction;
+      }
+    });
+    return resp;
+  }
+}
 
 // instantiate a new blockchain
 let blockChain = new Blockchain();

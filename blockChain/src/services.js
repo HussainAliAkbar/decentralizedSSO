@@ -9,8 +9,6 @@ function mineBlock (req, res, next) {
   //  This way, proofs of work can not be recycled on other chains.
   // for reference: https://medium.com/@schubert.konstantin/isnt-there-a-msitake-with-your-proof-of-work-30cf9467f0a5
   let proof = blockChain.proofOfWork(lastProof + lastHash);
-
-  // blockChain.newTransaction('0', nodeIdentifier, 100000);
   const previousHash = blockChain.hash(lastBlock);
   console.log('previous hash while adding block: ', previousHash);
   const block = blockChain.newBlock(proof, previousHash);
@@ -24,7 +22,7 @@ function mineBlock (req, res, next) {
 }
 
 async function addNewTransaction (req, res, next) {
-  const requiredFields = ['sender', 'receiver', 'amount', 'broadcast'];
+  const requiredFields = ['publicKey', 'encryptedData', 'broadcast'];
   let throwError = false;
   requiredFields.forEach(field => {
     if (!req.body[field] && req.body[field] !== false) {
@@ -35,12 +33,22 @@ async function addNewTransaction (req, res, next) {
     res.status(400);
     return res.send({ message: 'required fields missing' });
   }
+  let transactionAlreadyExistsOnTheChain = blockChain.fetchTransactionFromChain(req.body.publicKey);
+  let transactionAlreadyInProcess = blockChain.fetchTransactionFromPendingTransactions(req.body.publicKey);
+  if (transactionAlreadyExistsOnTheChain) {
+    res.status(400);
+    return res.send({ message: 'transaction already exists on the blockChain' });
+  }
+  if (transactionAlreadyInProcess) {
+    res.status(400);
+    return res.send({ message: 'transaction is already in process' });
+  }
 
   let index;
   try {
-    index = blockChain.newTransaction(req.body.sender, req.body.receiver, req.body.amount);
+    index = blockChain.newTransaction(req.body.publicKey, req.body.encryptedData);
     if (req.body.broadcast) {
-      await blockChain.broadcastTransaction(req.body.sender, req.body.receiver, req.body.amount);
+      await blockChain.broadcastTransaction(req.body.publicKey, req.body.encryptedData);
     }
   } catch (e) {
     res.status(500);
@@ -56,11 +64,11 @@ function getChain (req, res, next) {
   });
 }
 
-function getPendingTransactions(req,res,next) {
+function getPendingTransactions (req, res, next) {
   return res.send({
     transactions: blockChain.currentTransactions,
     length: blockChain.currentTransactions.length
-  })
+  });
 }
 
 function registerNewNode (req, res) {
