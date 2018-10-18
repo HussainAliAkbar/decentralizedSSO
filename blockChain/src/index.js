@@ -16,4 +16,5 @@ app.listen(process.env.PORT, () => console.log('app listening on port: ', proces
 routes(app);
 
 // TODO: 1. implement mining after each transaction for simplification
-// TODO: 2. verify data api call
+// TODO: 2. verify data api call - done
+// TODO: 3. implement scheduler which runs the consensus protocol after every minute
