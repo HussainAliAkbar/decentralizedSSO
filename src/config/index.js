@@ -26,6 +26,11 @@ let config = convict({
       format: String,
       default: path.join(__dirname, '../logs/')
     }
+  },
+  publicKeyPath: {
+    doc: 'public key path',
+    format: String,
+    default: ''
   }
 });
 
