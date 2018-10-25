@@ -37,3 +37,5 @@ routes(app);
 app.get('/ping', (req, res) => {
   res.send({ data: 'pong' });
 });
+
+// TODO: npm script to generate pub/private key

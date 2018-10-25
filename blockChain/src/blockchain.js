@@ -98,17 +98,18 @@ class Blockchain {
     return block;
   }
 
-  newTransaction (publicKey, encryptedData, transactionType, accountType = undefined) {
+  newTransaction (publicKey, encryptedData, transactionType, accountType = undefined, secureToken = undefined) {
     this.currentTransactions.push({
       publicKey,
       encryptedData,
       transactionType,
-      accountType
+      accountType,
+      secureToken
     });
     return this.lastBlock()['index'] + 1;
   }
 
-  async broadcastTransaction (publicKey, encryptedData, transactionType, accountType = undefined) {
+  async broadcastTransaction (publicKey, encryptedData, transactionType, accountType = undefined, secureToken = undefined) {
     console.log('broadcasting transactions');
     let neighbours = this.nodes;
     let promises = [];
@@ -118,6 +119,7 @@ class Blockchain {
         encryptedData,
         transactionType,
         accountType,
+        secureToken,
         broadcast: false
       }));
     }

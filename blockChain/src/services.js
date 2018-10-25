@@ -51,23 +51,34 @@ async function addNewTransaction (req, res, next) {
       return res.send({ message: 'not a valid account type' });
     }
   }
-  let transactionAlreadyExistsOnTheChain = blockChain.fetchTransactionFromChain(req.body.publicKey, req.body.transactionType);
-  let transactionAlreadyInProcess = blockChain.fetchTransactionFromPendingTransactions(req.body.publicKey, req.body.transactionType);
-  if (transactionAlreadyExistsOnTheChain) {
-    res.status(400);
-    return res.send({ message: 'transaction already exists on the blockChain' });
+
+  if (req.body['transactionType'] === constants.transactionType.serviceRegistration) {
+    if (!req.body['secureToken']) {
+      res.status(400);
+      return res.send({ message: 'please provide secure token' });
+    }
   }
-  if (transactionAlreadyInProcess) {
-    res.status(400);
-    return res.send({ message: 'transaction is already in process' });
+
+  if (req.body['transactionType'] === constants.transactionType.accountCreation) {
+    let transactionAlreadyExistsOnTheChain = blockChain.fetchTransactionFromChain(req.body.publicKey, req.body.transactionType);
+    let transactionAlreadyInProcess = blockChain.fetchTransactionFromPendingTransactions(req.body.publicKey, req.body.transactionType);
+
+    if (transactionAlreadyExistsOnTheChain) {
+      res.status(400);
+      return res.send({ message: 'transaction already exists on the blockChain' });
+    }
+    if (transactionAlreadyInProcess) {
+      res.status(400);
+      return res.send({ message: 'transaction is already in process' });
+    }
   }
 
   let index;
   try {
     index = blockChain.newTransaction(
-      req.body.publicKey, req.body.encryptedData, req.body.transactionType, req.body.accountType);
+      req.body.publicKey, req.body.encryptedData, req.body.transactionType, req.body.accountType, req.body.secureToken);
     if (req.body.broadcast) {
-      await blockChain.broadcastTransaction(req.body.publicKey, req.body.encryptedData, req.body.transactionType, req.body.accountType);
+      await blockChain.broadcastTransaction(req.body.publicKey, req.body.encryptedData, req.body.transactionType, req.body.accountType, req.body.secureToken);
     }
   } catch (e) {
     res.status(500);
