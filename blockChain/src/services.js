@@ -90,6 +90,12 @@ function getPendingTransactions (req, res, next) {
   });
 }
 
+function getRegisteredNodes (req, res, next) {
+  return res.send({
+    nodes: blockChain.nodes
+  });
+}
+
 function registerNewNode (req, res) {
   let body = req.body.nodes;
   if (!body.length) {
@@ -153,5 +159,6 @@ module.exports = {
   registerNewNode,
   resolveConflict,
   getPendingTransactions,
-  verifyTransaction
+  verifyTransaction,
+  getRegisteredNodes
 };

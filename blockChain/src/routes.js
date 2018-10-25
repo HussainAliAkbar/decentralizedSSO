@@ -16,6 +16,9 @@ function setupRoutes (app) {
   // register a new node
   app.post('/nodes/register', services.registerNewNode);
 
+  // get registered nodes
+  app.get('/nodes/registered', services.getRegisteredNodes);
+
   // resolve conflicts in the chain by coming to a consensus
   app.get('/nodes/resolve', services.resolveConflict);
 

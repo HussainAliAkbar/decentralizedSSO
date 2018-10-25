@@ -12,10 +12,10 @@ class Blockchain {
 
   registerNodes (address) {
     if (!_.includes(this.nodes, address)) {
-      console.log('adding new node');
+      console.log('adding new node: ', address);
       this.nodes.push(address);
     } else {
-      console.log('node already added');
+      console.log('node already added: ', address);
     }
   }
 
