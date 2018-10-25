@@ -7,6 +7,7 @@ const responseFormatter = require('./formatter/response');
 const compression = require('compression');
 const methodOverride = require('method-override');
 const logger = require('./bootstrap/bunyan');
+const routes = require('./routes');
 
 const app = module.exports = express();
 
@@ -32,7 +33,7 @@ app.use(responseFormatter.formatResponse);
 
 // setup a server
 app.listen(config.get('port'), () => logger.info('app listening on port: ', config.get('port')));
-
+routes(app);
 app.get('/ping', (req, res) => {
   res.send({ data: 'pong' });
 });
