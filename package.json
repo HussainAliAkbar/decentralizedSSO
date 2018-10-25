@@ -6,7 +6,9 @@
   "scripts": {
     "start": "nodemon --inspect=3058 src/server.js",
     "lint": "./node_modules/.bin/eslint src",
-    "lint-fix": "./node_modules/.bin/eslint src/ --fix"
+    "lint:fix": "./node_modules/.bin/eslint src/ --fix",
+    "gen:private:key": "openssl genrsa -out ./my-server.key.pem 2048",
+    "gen:public:key": "openssl rsa -in ./my-server.key.pem -pubout -out ./my-server.pub"
   },
   "pre-commit": [
     "lint"
