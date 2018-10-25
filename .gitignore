@@ -7,4 +7,6 @@ src/config/*.json
 logs/
 
 newKey
-newKey.pub
+*.pub
+*.pem
+encryptionTest.js

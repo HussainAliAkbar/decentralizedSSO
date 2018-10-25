@@ -98,15 +98,17 @@ class Blockchain {
     return block;
   }
 
-  newTransaction (publicKey, encryptedData) {
+  newTransaction (publicKey, encryptedData, transactionType, accountType = undefined) {
     this.currentTransactions.push({
       publicKey,
-      encryptedData
+      encryptedData,
+      transactionType,
+      accountType
     });
     return this.lastBlock()['index'] + 1;
   }
 
-  async broadcastTransaction (publicKey, encryptedData) {
+  async broadcastTransaction (publicKey, encryptedData, transactionType, accountType = undefined) {
     console.log('broadcasting transactions');
     let neighbours = this.nodes;
     let promises = [];
@@ -114,6 +116,8 @@ class Blockchain {
       promises.push(axios.post(`http://${neighbours[i]}/transactions/new`, {
         publicKey,
         encryptedData,
+        transactionType,
+        accountType,
         broadcast: false
       }));
     }
@@ -147,12 +151,12 @@ class Blockchain {
     return guess.substr(guess.length - 2) === '00'; // 2 is the difficulty
   }
 
-  fetchTransactionFromChain (identifier) {
+  fetchTransactionFromChain (publicKey, transactionType) {
     let chain = this.chain;
-    let resp = undefined;
+    let resp;
     chain.forEach(block => {
       block.transactions.forEach(transaction => {
-        if (transaction.publicKey === identifier) {
+        if (transaction.publicKey === publicKey && transaction.transactionType === transactionType) {
           resp = transaction;
         }
       });
@@ -162,7 +166,7 @@ class Blockchain {
 
   fetchTransactionFromPendingTransactions (identifier) {
     let currentTransactions = this.currentTransactions;
-    let resp = undefined;
+    let resp;
     currentTransactions.forEach(transaction => {
       if (transaction.publicKey === identifier) {
         resp = transaction;

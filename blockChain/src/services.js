@@ -1,4 +1,5 @@
 const blockChain = require('./blockchain');
+const constants = require('./constants');
 
 function mineBlock (req, res, next) {
   let lastBlock = blockChain.lastBlock();
@@ -22,7 +23,7 @@ function mineBlock (req, res, next) {
 }
 
 async function addNewTransaction (req, res, next) {
-  const requiredFields = ['publicKey', 'encryptedData', 'broadcast'];
+  const requiredFields = ['transactionType', 'publicKey', 'encryptedData', 'broadcast'];
   let throwError = false;
   requiredFields.forEach(field => {
     if (!req.body[field] && req.body[field] !== false) {
@@ -33,8 +34,25 @@ async function addNewTransaction (req, res, next) {
     res.status(400);
     return res.send({ message: 'required fields missing' });
   }
-  let transactionAlreadyExistsOnTheChain = blockChain.fetchTransactionFromChain(req.body.publicKey);
-  let transactionAlreadyInProcess = blockChain.fetchTransactionFromPendingTransactions(req.body.publicKey);
+  let isValidTransactionType = Object.keys(constants.transactionType)
+    .filter(type => req.body['transactionType'] === constants.transactionType[type]);
+
+  if (!isValidTransactionType.length) {
+    res.status(400);
+    return res.send({ message: 'not a valid transaction type' });
+  }
+
+  if (req.body['transactionType'] === constants.transactionType.accountCreation) {
+    let isValidAccountType = Object.keys(constants.accountType)
+      .filter(type => req.body['accountType'] === constants.accountType[type]);
+
+    if (!isValidAccountType.length) {
+      res.status(400);
+      return res.send({ message: 'not a valid account type' });
+    }
+  }
+  let transactionAlreadyExistsOnTheChain = blockChain.fetchTransactionFromChain(req.body.publicKey, req.body.transactionType);
+  let transactionAlreadyInProcess = blockChain.fetchTransactionFromPendingTransactions(req.body.publicKey, req.body.transactionType);
   if (transactionAlreadyExistsOnTheChain) {
     res.status(400);
     return res.send({ message: 'transaction already exists on the blockChain' });
@@ -46,9 +64,10 @@ async function addNewTransaction (req, res, next) {
 
   let index;
   try {
-    index = blockChain.newTransaction(req.body.publicKey, req.body.encryptedData);
+    index = blockChain.newTransaction(
+      req.body.publicKey, req.body.encryptedData, req.body.transactionType, req.body.accountType);
     if (req.body.broadcast) {
-      await blockChain.broadcastTransaction(req.body.publicKey, req.body.encryptedData);
+      await blockChain.broadcastTransaction(req.body.publicKey, req.body.encryptedData, req.body.transactionType, req.body.accountType);
     }
   } catch (e) {
     res.status(500);
@@ -106,8 +125,8 @@ async function resolveConflict (req, res) {
   }
 }
 
-function verifyTransaction(req, res, next) {
-  const requiredFields = ['publicKey', 'encryptedData'];
+function verifyTransaction (req, res, next) {
+  const requiredFields = ['publicKey', 'transactionType'];
   let throwError = false;
   requiredFields.forEach(field => {
     if (!req.body[field] && req.body[field] !== false) {
@@ -119,11 +138,11 @@ function verifyTransaction(req, res, next) {
     return res.send({ message: 'required fields missing' });
   }
 
-  let transaction = blockChain.fetchTransactionFromChain(req.body.publicKey);
+  let transaction = blockChain.fetchTransactionFromChain(req.body.publicKey, req.body.transactionType);
   if (transaction && transaction.encryptedData === req.body.encryptedData) {
-    res.send({message: true});
+    res.send({ message: true });
   } else {
-    res.send({message: false});
+    res.send({ message: false });
   }
 }
 
