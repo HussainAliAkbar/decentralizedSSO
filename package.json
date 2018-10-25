@@ -10,13 +10,9 @@
     "gen:private:key": "openssl genrsa -out ./my-server.key.pem 2048",
     "gen:public:key": "openssl rsa -in ./my-server.key.pem -pubout -out ./my-server.pub"
   },
-  "pre-commit": [
-    "lint"
-  ],
   "author": "Hussain Ali Akbar",
   "license": "ISC",
   "dependencies": {
-    "@10pearls/revalidator": "^0.3.1",
     "body-parser": "^1.15.2",
     "bunyan": "^1.8.12",
     "chance": "^1.0.4",
@@ -42,7 +38,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint-fix"
+      "pre-commit": "npm run lint:fix"
     }
   }
 }
