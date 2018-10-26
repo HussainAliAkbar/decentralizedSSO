@@ -62,9 +62,8 @@ class Blockchain {
     let responses = await Promise.all(promises);
 
     responses.forEach(res => {
-      let length = res.data.length;
-      let chain = res.data.chain;
-
+      let length = res.data.data.length;
+      let chain = res.data.data.chain;
       // Check if the length is longer and the chain is valid
       if (length > maxLength && this.validChain(chain)) {
         console.log('the other chain is valid');

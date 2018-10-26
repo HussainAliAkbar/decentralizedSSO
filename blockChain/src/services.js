@@ -1,3 +1,4 @@
+const axios = require('axios');
 const blockChain = require('./blockchain');
 const constants = require('./constants');
 
@@ -78,7 +79,17 @@ async function addNewTransaction (req, res, next) {
     index = blockChain.newTransaction(
       req.body.publicKey, req.body.encryptedData, req.body.transactionType, req.body.accountType, req.body.secureToken);
     if (req.body.broadcast) {
-      await blockChain.broadcastTransaction(req.body.publicKey, req.body.encryptedData, req.body.transactionType, req.body.accountType, req.body.secureToken);
+      // instead of broadcast, we're mining a new block on every transaction for simplicity
+      // await blockChain.broadcastTransaction(req.body.publicKey, req.body.encryptedData, req.body.transactionType, req.body.accountType, req.body.secureToken);
+      const thisPort = +process.env.PORT;
+      const currentNode = constants.nodes.filter(node => node.port === thisPort)[0];
+      await axios.get(`http://${currentNode.name}:${currentNode.port}/mine`);
+    } else {
+      // if broadcast is false, it means that it is a node on which the actual transaction did not happen
+      // so we will simply call the consensus protocol which will fetch the updated chain
+      const thisPort = +process.env.PORT;
+      const currentNode = constants.nodes.filter(node => node.port === thisPort)[0];
+      await axios.get(`http://${currentNode.name}:${currentNode.port}/nodes/resolve`);
     }
   } catch (e) {
     res.status(500);
