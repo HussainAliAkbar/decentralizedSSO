@@ -24,6 +24,9 @@ function setupRoutes (app) {
 
   // verify that a transaction exists on the blockChain or not
   app.post('/verify-transaction', services.verifyTransaction);
+
+  // fetch by secure token
+  app.post('/fetch-by-secure-token', services.fetchBySecureToken);
 }
 
 module.exports = setupRoutes;

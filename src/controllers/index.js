@@ -14,7 +14,17 @@ function requestSecureToken (req, res, next) {
     .catch(res.json);
 }
 
+function signUp (req, res, next) {
+  const payload = {
+    secureToken: req.body.secureToken
+  };
+  return services.signUp(payload)
+    .then(res.json)
+    .catch(res.json);
+}
+
 module.exports = {
   testController,
-  requestSecureToken
+  requestSecureToken,
+  signUp
 };

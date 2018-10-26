@@ -31,6 +31,16 @@ let config = convict({
     doc: 'public key path',
     format: String,
     default: ''
+  },
+  privateKeyPath: {
+    doc: 'private key path',
+    format: String,
+    default: ''
+  },
+  blockChainUrl: {
+    dock: 'url for the blockChain',
+    format: String,
+    default: ''
   }
 });
 

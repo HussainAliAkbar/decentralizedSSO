@@ -166,6 +166,20 @@ class Blockchain {
     return resp;
   }
 
+  fetchTransactionFromChainBySecureToken (secureToken) {
+    let chain = this.chain;
+    let resp;
+    chain.forEach(block => {
+      block.transactions.forEach(transaction => {
+        console.log(transaction);
+        if (transaction.secureToken && transaction.secureToken === secureToken) {
+          resp = transaction;
+        }
+      });
+    });
+    return resp;
+  }
+
   fetchTransactionFromPendingTransactions (identifier) {
     let currentTransactions = this.currentTransactions;
     let resp;

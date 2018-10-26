@@ -163,6 +163,23 @@ function verifyTransaction (req, res, next) {
   }
 }
 
+function fetchBySecureToken (req, res, next) {
+  const requiredFields = ['secureToken'];
+  let throwError = false;
+  requiredFields.forEach(field => {
+    if (!req.body[field] && req.body[field] !== false) {
+      throwError = true;
+    }
+  });
+  if (throwError) {
+    res.status(400);
+    return res.send({ message: 'required fields missing' });
+  }
+
+  let transaction = blockChain.fetchTransactionFromChainBySecureToken(req.body.secureToken);
+  res.send({ transaction });
+}
+
 module.exports = {
   mineBlock,
   addNewTransaction,
@@ -171,5 +188,6 @@ module.exports = {
   resolveConflict,
   getPendingTransactions,
   verifyTransaction,
-  getRegisteredNodes
+  getRegisteredNodes,
+  fetchBySecureToken
 };
