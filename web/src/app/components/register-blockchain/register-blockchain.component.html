@@ -1,0 +1,62 @@
+<form [formGroup]="registerationForm" (ngSubmit)="saveForm()" class="form">
+
+  <div>
+    <input formControlName="firstName" type="text" />
+    <label> First Name </label>
+    <div class="mf-ripple"></div>
+    <span class="error" *ngIf="registerationForm.controls.firstName.hasError('required') && registerationForm.controls.firstName.touched">First Name is required</span>
+  </div>
+  <div>
+    <input formControlName="lastName" type="text" />
+    <label> Last Name </label>
+    <div class="mf-ripple"></div>
+    <span class="error" *ngIf="registerationForm.controls.lastName.hasError('required') && registerationForm.controls.lastName.touched">First Name is required</span>
+
+  </div>
+  <div>
+    <input formControlName="email" type="text" />
+    <label> Email </label>
+    <div class="mf-ripple"></div>
+    <span class="error" *ngIf="registerationForm.controls.email.hasError('required') && registerationForm.controls.email.touched">First Name is required</span>
+
+  </div>
+  <div>
+    <input formControlName="phone" type="text" />
+    <label> Phone </label>
+    <div class="mf-ripple"></div>
+    <span class="error" *ngIf="registerationForm.controls.phone.hasError('required') && registerationForm.controls.phone.touched">First Name is required</span>
+
+  </div>
+  <div>
+    <input formControlName="gender" type="text" />
+    <label> Gender </label>
+    <div class="mf-ripple"></div>
+    <span class="error" *ngIf="registerationForm.controls.gender.hasError('required') && registerationForm.controls.gender.touched">First Name is required</span>
+
+  </div>
+  <div>
+    <input formControlName="city" type="text" />
+    <label> City </label>
+    <div class="mf-ripple"></div>
+    <span class="error" *ngIf="registerationForm.controls.city.hasError('required') && registerationForm.controls.city.touched">First Name is required</span>
+
+  </div>
+  <div>
+    <input formControlName="state" type="text" />
+    <label> State </label>
+    <div class="mf-ripple"></div>
+    <span class="error" *ngIf="registerationForm.controls.state.hasError('required') && registerationForm.controls.state.touched">First Name is required</span>
+
+  </div>
+  <div>
+    <input formControlName="country" type="text" />
+    <label> Country </label>
+    <div class="mf-ripple"></div>
+    <span class="error" *ngIf="registerationForm.controls.country.hasError('required') && registerationForm.controls.country.touched">First Name is required</span>
+
+  </div>
+  <div>
+    <button (click)="saveForm()" type="button" class="btn btn-sm btn-link" [disabled]="registerationForm.invalid">
+      Save </button>
+  </div>
+</form>

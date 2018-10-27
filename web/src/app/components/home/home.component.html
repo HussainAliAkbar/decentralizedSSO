@@ -1,5 +1,19 @@
 <div class="container">
   <h1 class="title">
-    {{ 'PAGES.HOME.TITLE' | translate }}
   </h1>
+  <button (click)="generateKeys()">Generate Keys</button>
+  Public: {{publicKey}} Private: {{privateKey}}
 </div>
+<div>
+  <input type="text" name="plainText" class="form-control" id="plainText" placeholder="Enter plain text." [(ngModel)]="plainText">
+    <button (click)="encrypt()">Encrypt</button>
+  Encrypted :<span>{{encryptedPublicKey}}</span>
+</div>
+
+<div>
+    <input type="text" name="plainText" class="form-control" id="plainText" placeholder="Enter cipher text." [(ngModel)]="cipherText">
+      <button (click)="decrypt()">Decrypt</button>
+    Decrypted :<span>{{decryptedPublicKey}}</span>
+  </div>
+
+  <app-register-blockchain></app-register-blockchain>
