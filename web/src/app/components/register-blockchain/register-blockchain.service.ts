@@ -14,5 +14,5 @@ export class RegisterBlockchainService {
 
 }
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Referer': 'http://192.168.100.20:3000' })
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
