@@ -84,6 +84,7 @@ async function addNewTransaction (req, res, next) {
       const thisPort = +process.env.PORT;
       const currentNode = constants.nodes.filter(node => node.port === thisPort)[0];
       await axios.get(`http://${currentNode.name}:${currentNode.port}/mine`);
+      await blockChain.broadcastTransaction(req.body.publicKey, req.body.encryptedData, req.body.transactionType, req.body.accountType, req.body.secureToken);
     } else {
       // if broadcast is false, it means that it is a node on which the actual transaction did not happen
       // so we will simply call the consensus protocol which will fetch the updated chain
