@@ -12,36 +12,43 @@
   </div>
   <div class="card mt-4">
     <div class="card-body">
-        <p class="h4 mb-4">Registeration Form:</p>
+      <p class="h4 mb-4">Registeration Form:</p>
       <form [formGroup]="registerationForm" (ngSubmit)="saveForm()" class="form">
         <div class="form-group">
           <label for="firstName">First Name</label>
-          <input type="text" class="form-control" id="firstName" placeholder="Enter first name">
+          <input formControlName="firstName" type="text" class="form-control" id="firstName" placeholder="Enter first name">
+          <span class="error" *ngIf="registerationForm.controls.firstName.hasError('required') && registerationForm.controls.firstName.touched">*First Name is required</span>
         </div>
         <div class="form-group">
           <label for="lastName">Last Name</label>
-          <input type="text" class="form-control" id="lastName" placeholder="Enter last name">
+          <input formControlName="lastName" type="text" class="form-control" id="lastName" placeholder="Enter last name">
+          <span class="error" *ngIf="registerationForm.controls.lastName.hasError('required') && registerationForm.controls.lastName.touched">*Last Name is required</span>
         </div>
         <div class="form-group">
           <label for="exampleInputEmail1">Email address</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+          <input type="email" formControlName="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
           <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+          <span class="error" *ngIf="registerationForm.controls.email.hasError('required') && registerationForm.controls.email.touched">*Email is required</span>
         </div>
         <div class="form-group">
-            <label for="phone">Phone</label>
-            <input type="text" class="form-control" id="phone" placeholder="Enter phone">
-          </div>
+          <label for="phone">Phone</label>
+          <input type="text" formControlName="phone" class="form-control" id="phone" placeholder="Enter phone">
+          <span class="error" *ngIf="registerationForm.controls.phone.hasError('required') && registerationForm.controls.phone.touched">*Phone is required</span>
+        </div>
         <div class="form-group">
           <label for="city">City</label>
-          <input type="text" class="form-control" id="city" placeholder="Enter city">
+          <input type="text" formControlName="city" class="form-control" id="city" placeholder="Enter city">
+          <span class="error" *ngIf="registerationForm.controls.city.hasError('required') && registerationForm.controls.city.touched">*City is required</span>
         </div>
         <div class="form-group">
           <label for="state">State</label>
-          <input type="text" class="form-control" id="state" placeholder="Enter state">
+          <input type="text" formControlName="state" class="form-control" id="state" placeholder="Enter state">
+          <span class="error" *ngIf="registerationForm.controls.state.hasError('required') && registerationForm.controls.state.touched">*State is required</span>
         </div>
         <div class="form-group">
-          <label for="exampleInputEmail1">Country</label>
-          <input type="country" class="form-control" id="country" placeholder="Enter country">
+          <label for="country">Country</label>
+          <input type="country" formControlName="country" class="form-control" id="country" placeholder="Enter country">
+          <span class="error" *ngIf="registerationForm.controls.country.hasError('required') && registerationForm.controls.country.touched">*Country is required</span>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
         <button (click)="goBack()" type="button" class="ml-2 btn btn-secondary">Back</button>
