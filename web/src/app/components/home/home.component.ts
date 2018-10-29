@@ -27,15 +27,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
   }
-  // encrypt() {
-  //   debugger;
-  //   this.encryptedPublicKey = this.crypt.encrypt(this.plainText);
-  //   console.log(this.encryptedPublicKey)
-  // }
-  // decrypt() {
-  //   // this.decryptedPublicKey = this.crypt.decrypt(this.cipherText);cipherText
-  //   this.crypt.decrypt('U2FsdGVkX19JLvRWOYtZHiM06CDt++grjGtt46lde91Cid5RdVxX5FvVT1qN2kda');
-  // }
+
   requestSecureToken() {
     this.homeService.getSecureToken().then((result) => {
       this.requestedTpsSecureToken = result.data.token;
@@ -57,8 +49,9 @@ export class HomeComponent implements OnInit {
     }
     this.homeService.sendConsumerData(body).then((result) => {
       this.isDataSent = true;
-    }).catch((error) => {
-
+      this.toastrService.success('Success');
+    }).catch((err) => {
+      this.toastrService.error(err);
     });
   }
   signUp() {
@@ -66,7 +59,9 @@ export class HomeComponent implements OnInit {
       "secureToken": this.requestedTpsSecureToken
     }
     this.homeService.consumerSignUp(secureToken).then(value => {
-      console.log(value);
+      this.toastrService.success('User signup success');
+    }).catch(err => {
+      this.toastrService.error(err);
     });
   }
 }
