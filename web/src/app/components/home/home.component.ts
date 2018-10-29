@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { HomeService } from './home.service';
 import { Component, OnInit } from '@angular/core';
 import * as keypair from 'keypair';
@@ -20,7 +21,8 @@ export class HomeComponent implements OnInit {
   constructor(
     private crypt: CryptographyComponent,
     private homeService: HomeService,
-    private router: Router
+    private router: Router,
+    private toastrService: ToastrService
   ) { }
 
   ngOnInit() {
@@ -38,9 +40,10 @@ export class HomeComponent implements OnInit {
     this.homeService.getSecureToken().then((result) => {
       this.requestedTpsSecureToken = result.data.token;
       this.requestedTpsPublicKey = result.data.publicKey;
+      this.toastrService.success('Success');
     }).catch(err => {
-
-    })
+      this.toastrService.error(err);
+    });
   }
   sendConsumerData() {
     const consumerInformation = "{'firstName':'asad'}";

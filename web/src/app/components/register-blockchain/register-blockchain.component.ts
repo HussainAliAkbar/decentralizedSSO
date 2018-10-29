@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CryptographyComponent } from '../common/cryptography/cryptography.component';
@@ -21,7 +22,8 @@ export class RegisterBlockchainComponent implements OnInit {
     private cryptography: CryptographyComponent,
     private registerBlockchainService: RegisterBlockchainService,
     private router: Router,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute,
+    private toastrService: ToastrService) { }
 
   ngOnInit() {
     this.initializeForm();
@@ -46,6 +48,7 @@ export class RegisterBlockchainComponent implements OnInit {
     const pair = keypair();
     this.generatedPublicKey = pair.public;
     this.generatedPrivateKey = pair.private;
+    this.toastrService.success('Keys Generated');
   }
   saveForm() {
     const userDetails: UserDetails = {
@@ -71,6 +74,10 @@ export class RegisterBlockchainComponent implements OnInit {
       "broadcast": true
     }
 
-    this.registerBlockchainService.registerUser(JSON.stringify(userDetailsObject));
+    this.registerBlockchainService.registerUser(JSON.stringify(userDetailsObject)).then(result => {
+      this.toastrService.success('Success');
+    }).catch(err => {
+      this.toastrService.error(err);
+    });
   }
 }

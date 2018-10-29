@@ -7,15 +7,11 @@ import { Router } from '@angular/router';
 })
 export class RegisterBlockchainService {
 
-  constructor(private http: HttpClient
+  constructor(private http: HttpClient,
  ) { }
   registerUser(registerUserJson: string): Promise<any> {
     // http://192.168.100.20:3000/
     return this.http.post(':3000/transactions/new', registerUserJson).toPromise<any>();
-  }
-
-  getSecureToken() {
-    return this.http.get('').toPromise<any>();
   }
 
 }
