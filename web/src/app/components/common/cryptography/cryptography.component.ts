@@ -12,9 +12,9 @@ export class CryptographyComponent implements OnInit {
   ngOnInit() {
   }
 
-  encrypt(plainText: string): any {
+  encrypt(plainText: string, publicKey: string): string {
     // Encrypt
-    var ciphertext = this.CryptoTS.AES.encrypt(plainText, 'secret key 123');
+    var ciphertext = this.CryptoTS.AES.encrypt(plainText, publicKey);
     return ciphertext;
   }
   decrypt(ciphertext: string) {

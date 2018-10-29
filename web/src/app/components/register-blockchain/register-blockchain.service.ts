@@ -1,15 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegisterBlockchainService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient
+ ) { }
   registerUser(registerUserJson: string): Promise<any> {
-    return this.http.post('http://192.168.100.20:3000/transactions/new', registerUserJson, httpOptions).toPromise<any>();
+    // http://192.168.100.20:3000/
+    return this.http.post(':3000/transactions/new', registerUserJson).toPromise<any>();
+  }
 
+  getSecureToken() {
+    return this.http.get('').toPromise<any>();
   }
 
 }
