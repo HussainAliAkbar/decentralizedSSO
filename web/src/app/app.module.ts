@@ -3,22 +3,29 @@ import 'reflect-metadata';
 import '../polyfills';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // NG Translate
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { ElectronService } from './providers/electron.service';
+import {MatButtonModule, MatCheckboxModule} from '@angular/material';
+import { MatRadioModule ,MatSelectModule, MatIconModule, MatTabsModule, MatMenuModule} from '@angular/material';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 import { WebviewDirective } from './directives/webview.directive';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
+import { CryptographyComponent } from './components/common/cryptography/cryptography.component';
+import { RegisterBlockchainComponent } from './components/register-blockchain/register-blockchain.component';
+import { RequestInterceptor } from './components/services/http-config/http-interceptor';
+import { ShellComponent } from './components/shell/shell.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -29,12 +36,25 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     HomeComponent,
-    WebviewDirective
+    WebviewDirective,
+    CryptographyComponent,
+    RegisterBlockchainComponent,
+    ShellComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
+    NgbModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatTabsModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    NoopAnimationsModule,
+    MatRadioModule,
     AppRoutingModule,
     TranslateModule.forRoot({
       loader: {
@@ -44,7 +64,13 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })
   ],
-  providers: [ElectronService],
+  providers: [ElectronService, CryptographyComponent,
+    HttpClient,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RequestInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
