@@ -18,6 +18,10 @@ export class HomeComponent implements OnInit {
   requestedTpsSecureToken: string;
   requestedTpsPublicKey: string;
   isDataSent = false;
+  requestData;
+  responseData;
+  signupRequestData;
+  signupResponseData;
   constructor(
     private crypt: CryptographyComponent,
     private homeService: HomeService,
@@ -47,9 +51,11 @@ export class HomeComponent implements OnInit {
       "encryptedData": encryptedConsumerInfo,
       "broadcast": true
     }
+    this.requestData = JSON.stringify(body);
     this.homeService.sendConsumerData(body).then((result) => {
       this.isDataSent = true;
       this.toastrService.success('Success');
+      this.responseData = JSON.stringify(result.data);
     }).catch((err) => {
       this.toastrService.error(err);
     });
@@ -58,8 +64,10 @@ export class HomeComponent implements OnInit {
     const secureToken = {
       "secureToken": this.requestedTpsSecureToken
     }
+    this.signupRequestData = JSON.stringify(secureToken);
     this.homeService.consumerSignUp(secureToken).then(value => {
       this.toastrService.success('User signup success');
+      this.signupResponseData = JSON.stringify(value.data);
     }).catch(err => {
       this.toastrService.error(err);
     });
