@@ -32,7 +32,7 @@
         </p>
         <button (click)="sendConsumerData()" class="btn btn-outline-primary mt-2" [disabled]="!requestedTpsSecureToken && !requestedTpsPublicKey">Send Consumer Data</button>
         <span class="error ml-2 mt-2" *ngIf="!requestedTpsSecureToken && !requestedTpsPublicKey">*Button disabled till secure token and public key are populated</span>
-        <p class="h6"> Request Data</p>
+        <p class="h6 mt-4"> Request Data</p>
         <textarea class="form-control" style="height: 150px" readonly>{{requestData}}</textarea>
         <p class="h6">Response Data</p>
         <textarea class="form-control" style="height: 150px" readonly>{{responseData}}
@@ -47,7 +47,7 @@
         <p class="h4">Sign Up to the third party service (send secure token to the third party service) </p>
         <button (click)="signUp()" class="btn btn-outline-primary mt-2" [disabled]="!isDataSent">Sign Up</button>
         <span class="error ml-2 mt-2" *ngIf="!isDataSent">*Button disabled till consumer data is sent to the server</span>
-        <p class="h6"> Request Data</p>
+        <p class="h6 mt-4"> Request Data</p>
         <textarea class="form-control" style="height: 150px" readonly>{{signupRequestData}}</textarea>
         <p class="h6">Response Data</p>
         <textarea class="form-control" style="height: 150px" readonly>{{signupResponseData}}
