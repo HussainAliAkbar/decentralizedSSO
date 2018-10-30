@@ -13,3 +13,4 @@ Idea Improvements:
 2. Client Utility/ Browser Extension that will manage the public and private keys as well as the encryption/decryption tasks.
 3. Currency generated on the blockchain can be leveraged to pay the 3rd party services who use the SSO (not sure how though).
 4. We can also utilize the concept of "permissions" with our flow.
+5. Decryption should be done on the server.
