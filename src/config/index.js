@@ -30,17 +30,17 @@ let config = convict({
   publicKeyPath: {
     doc: 'public key path',
     format: String,
-    default: ''
+    default: '/home/asadurrehman/Projects/decentralizedSSO/src/pub.pub'
   },
   privateKeyPath: {
     doc: 'private key path',
     format: String,
-    default: ''
+    default: '/home/asadurrehman/Projects/decentralizedSSO/src/priv.pem'
   },
   blockChainUrl: {
     dock: 'url for the blockChain',
     format: String,
-    default: ''
+    default: 'localhost:3000'
   }
 });
 

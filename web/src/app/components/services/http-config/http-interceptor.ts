@@ -22,7 +22,7 @@ export class RequestInterceptor implements HttpInterceptor {
             setHeaders: {
                 'Content-Type': 'application/json',
             },
-            url: `http://172.16.16.124${request.url}`
+            url: `http://localhost${request.url}`
         });
 
         return next.handle(request).pipe(map(res => res),

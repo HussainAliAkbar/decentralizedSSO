@@ -1,3 +1,4 @@
+import { LocalStorage } from './../services/local-storage.service';
 import { ToastrService } from 'ngx-toastr';
 import { HomeService } from './home.service';
 import { Component, OnInit } from '@angular/core';
@@ -20,13 +21,17 @@ export class HomeComponent implements OnInit {
   isDataSent = false;
   requestData;
   responseData;
+  requestConsumerDataObject;
+  responseConsumerDataObject;
+  responseConsumerDecryptedData;
   signupRequestData;
   signupResponseData;
+  signupResponseDecryptedData;
   constructor(
     private crypt: CryptographyComponent,
     private homeService: HomeService,
-    private router: Router,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private localStorage: LocalStorage
   ) { }
 
   ngOnInit() {
@@ -38,12 +43,13 @@ export class HomeComponent implements OnInit {
       this.requestedTpsPublicKey = result.data.publicKey;
       this.toastrService.success('Success');
     }).catch(err => {
-      this.toastrService.error(err);
+      this.toastrService.error(err.error.errors[0].message);
     });
   }
   sendConsumerData() {
-    const consumerInformation = '{"firstName":"asad"}';
-    const encryptedConsumerInfo = this.crypt.encrypt(consumerInformation, this.requestedTpsPublicKey).toString();
+    // const consumerInformation = '{"firstName":"asad"}';
+    const encryptedConsumerInfo = this.crypt.encrypt(this.responseConsumerDecryptedData,
+      this.requestedTpsPublicKey).toString();
     const body = {
       'transactionType': 'serviceRegistration',
       'publicKey': this.requestedTpsPublicKey,
@@ -57,9 +63,26 @@ export class HomeComponent implements OnInit {
       this.toastrService.success('Success');
       this.responseData = JSON.stringify(result.data);
     }).catch((err) => {
-      this.toastrService.error(err);
+      this.toastrService.error(err.error.errors[0].message);
     });
   }
+
+  requestConsumerData() {
+    const requestBody = {
+      "publicKey": this.localStorage.getItem('consumerPublicKey')
+    };
+    this.requestConsumerDataObject = JSON.stringify(requestBody);
+    this.homeService.requestConsumerData(requestBody).then(result => {
+      this.responseConsumerDataObject = JSON.stringify(result.data);
+      this.toastrService.success('Success');
+      debugger;
+      this.responseConsumerDecryptedData = this.crypt.decrypt(result.data.transaction.encryptedData,
+        this.localStorage.getItem('consumerPrivateKey'));
+    }).catch(err => {
+      this.toastrService.error(err.error.errors[0].message);
+    });
+  }
+
   signUp() {
     const secureToken = {
       'secureToken': this.requestedTpsSecureToken
@@ -68,6 +91,10 @@ export class HomeComponent implements OnInit {
     this.homeService.consumerSignUp(secureToken).then(value => {
       this.toastrService.success('User signup success');
       this.signupResponseData = JSON.stringify(value.data);
+      debugger;
+      const s = value.data.transaction.encryptedData;
+      this.signupResponseDecryptedData = this.crypt.decrypt(value.data.transaction.encryptedData,
+        this.localStorage.getItem('servicePrivateKey'));
     }).catch(err => {
       this.toastrService.error(err);
     });

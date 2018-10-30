@@ -5,9 +5,19 @@ const routes = require('./routes');
 const formatter = require('./responseFormatter');
 const utils = require('./utils');
 
+// CORS middleware
+let allowCrossDomain = function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', '*');
+
+  next();
+};
+
 const app = express();
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(allowCrossDomain);
 const nodeIdentifier = uuidv4();
 
 // setup a server

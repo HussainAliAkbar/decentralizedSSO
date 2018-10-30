@@ -62,9 +62,8 @@ class Blockchain {
     let responses = await Promise.all(promises);
 
     responses.forEach(res => {
-      let length = res.data.length;
-      let chain = res.data.chain;
-
+      let length = res.data.data.length;
+      let chain = res.data.data.chain;
       // Check if the length is longer and the chain is valid
       if (length > maxLength && this.validChain(chain)) {
         console.log('the other chain is valid');
@@ -173,6 +172,19 @@ class Blockchain {
       block.transactions.forEach(transaction => {
         console.log(transaction);
         if (transaction.secureToken && transaction.secureToken === secureToken) {
+          resp = transaction;
+        }
+      });
+    });
+    return resp;
+  }
+
+  fetchTransactionFromChainByPublicKey (publicKey) {
+    let chain = this.chain;
+    let resp;
+    chain.forEach(block => {
+      block.transactions.forEach(transaction => {
+        if (transaction.publicKey && transaction.publicKey === publicKey) {
           resp = transaction;
         }
       });

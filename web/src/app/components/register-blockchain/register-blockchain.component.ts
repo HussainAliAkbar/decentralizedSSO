@@ -6,6 +6,7 @@ import { UserDetails } from './RegisterBlockchain';
 import { RegisterBlockchainService } from './register-blockchain.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
+import { LocalStorage } from '../services/local-storage.service';
 
 @Component({
   selector: 'app-register-blockchain',
@@ -23,7 +24,8 @@ export class RegisterBlockchainComponent implements OnInit {
     private registerBlockchainService: RegisterBlockchainService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private localStorage: LocalStorage
   ) { }
 
   ngOnInit() {
@@ -45,12 +47,23 @@ export class RegisterBlockchainComponent implements OnInit {
     this.router.navigateByUrl('/');
   }
   async generateKeys() {
+    const params = this.activatedRoute.queryParams.pipe(first()).toPromise();
     const keypair = require('keypair');
     const pair = await keypair();
     this.generatedPublicKey = pair.public;
     this.generatedPrivateKey = pair.private;
+    debugger;
+    if (params['__zone_symbol__value'].accType === 'consumer') {
+      this.localStorage.setItem('consumerPublicKey', pair.public)
+      this.localStorage.setItem('consumerPrivateKey', pair.private)
+    }
+    if (params['__zone_symbol__value'].accType === 'service') {
+      this.localStorage.setItem('servicePublicKey', pair.public)
+      this.localStorage.setItem('servicePrivateKey', pair.private)
+    }
     this.toastrService.success('Keys Generated');
   }
+
   saveForm() {
     const userDetails: UserDetails = {
       firstName: this.registerationForm.get('firstName').value,
@@ -67,12 +80,12 @@ export class RegisterBlockchainComponent implements OnInit {
     const params = this.activatedRoute.queryParams.pipe(first()).toPromise();
     const userDetailsObject = {
       'transactionType': 'accountCreation',
-      'accountType': params['accType'],
+      'accountType': params['__zone_symbol__value'].accType,
       'publicKey': this.generatedPublicKey,
       'encryptedData': encryptedBody.toString(),
       'broadcast': true
     };
-
+    debugger;
     this.registerBlockchainService.registerUser(JSON.stringify(userDetailsObject)).then(result => {
       this.toastrService.success('Success');
     }).catch(err => {

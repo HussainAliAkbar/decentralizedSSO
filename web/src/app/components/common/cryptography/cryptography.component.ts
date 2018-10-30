@@ -17,9 +17,9 @@ export class CryptographyComponent implements OnInit {
     const ciphertext = this.CryptoTS.AES.encrypt(plainText, publicKey);
     return ciphertext;
   }
-  decrypt(ciphertext: string) {
+  decrypt(ciphertext: string, privateKey: string) {
     // Decrypt
-    const bytes = this.CryptoTS.AES.decrypt(ciphertext.toString(), 'secret key 123');
+    const bytes = this.CryptoTS.AES.decrypt(ciphertext.toString(), privateKey);
     const plaintext = bytes.toString(this.CryptoTS.enc.Utf8);
     return plaintext;
   }

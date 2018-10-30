@@ -25,6 +25,26 @@
       </div>
     </div>
   </div>
+
+  <div class="mt-4">
+    <div class="card">
+      <div class="card-body">
+        <p class="h4">Request encrypted consumer information from blockchain service with the public key of the consumer
+        </p>
+        <button (click)="requestConsumerData()" class="btn btn-outline-primary mt-2" [disabled]="false">Request Consumer Data</button>
+        <!-- <span class="error ml-2 mt-2" *ngIf="!requestedTpsSecureToken && !requestedTpsPublicKey">*Button disabled till secure token and public key are populated</span> -->
+        <p class="h6 mt-4"> Request Data</p>
+        <textarea class="form-control" style="height: 150px" readonly>{{requestConsumerDataObject}}</textarea>
+        <p class="h6">Response Data</p>
+        <textarea class="form-control" style="height: 150px" readonly>{{responseConsumerDataObject}}
+              </textarea>
+        <p class="h6">Decrypted Data</p>
+        <textarea class="form-control" style="height: 150px" readonly>{{responseConsumerDecryptedData}}
+                  </textarea>
+      </div>
+    </div>
+  </div>
+
   <div class="mt-4">
     <div class="card">
       <div class="card-body">
@@ -52,6 +72,9 @@
         <p class="h6">Response Data</p>
         <textarea class="form-control" style="height: 150px" readonly>{{signupResponseData}}
           </textarea>
+        <p class="h6">Decrypted Data</p>
+        <textarea class="form-control" readonly>{{signupResponseDecryptedData}}
+            </textarea>
       </div>
     </div>
   </div>

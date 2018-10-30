@@ -1,3 +1,4 @@
+const axios = require('axios');
 const blockChain = require('./blockchain');
 const constants = require('./constants');
 
@@ -78,7 +79,18 @@ async function addNewTransaction (req, res, next) {
     index = blockChain.newTransaction(
       req.body.publicKey, req.body.encryptedData, req.body.transactionType, req.body.accountType, req.body.secureToken);
     if (req.body.broadcast) {
+      // instead of broadcast, we're mining a new block on every transaction for simplicity
+      // await blockChain.broadcastTransaction(req.body.publicKey, req.body.encryptedData, req.body.transactionType, req.body.accountType, req.body.secureToken);
+      const thisPort = +process.env.PORT;
+      const currentNode = constants.nodes.filter(node => node.port === thisPort)[0];
+      await axios.get(`http://${currentNode.name}:${currentNode.port}/mine`);
       await blockChain.broadcastTransaction(req.body.publicKey, req.body.encryptedData, req.body.transactionType, req.body.accountType, req.body.secureToken);
+    } else {
+      // if broadcast is false, it means that it is a node on which the actual transaction did not happen
+      // so we will simply call the consensus protocol which will fetch the updated chain
+      const thisPort = +process.env.PORT;
+      const currentNode = constants.nodes.filter(node => node.port === thisPort)[0];
+      await axios.get(`http://${currentNode.name}:${currentNode.port}/nodes/resolve`);
     }
   } catch (e) {
     res.status(500);
@@ -180,6 +192,23 @@ function fetchBySecureToken (req, res, next) {
   res.send({ transaction });
 }
 
+function fetchByPublicKey (req, res, next) {
+  const requiredFields = ['publicKey'];
+  let throwError = false;
+  requiredFields.forEach(field => {
+    if (!req.body[field] && req.body[field] !== false) {
+      throwError = true;
+    }
+  });
+  if (throwError) {
+    res.status(400);
+    return res.send({ message: 'required fields missing' });
+  }
+
+  let transaction = blockChain.fetchTransactionFromChainByPublicKey(req.body.publicKey);
+  res.send({ transaction });
+}
+
 module.exports = {
   mineBlock,
   addNewTransaction,
@@ -189,5 +218,6 @@ module.exports = {
   getPendingTransactions,
   verifyTransaction,
   getRegisteredNodes,
-  fetchBySecureToken
+  fetchBySecureToken,
+  fetchByPublicKey
 };
