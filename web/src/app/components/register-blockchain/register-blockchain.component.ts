@@ -23,7 +23,8 @@ export class RegisterBlockchainComponent implements OnInit {
     private registerBlockchainService: RegisterBlockchainService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService
+  ) { }
 
   ngOnInit() {
     this.initializeForm();
@@ -43,9 +44,10 @@ export class RegisterBlockchainComponent implements OnInit {
   goBack() {
     this.router.navigateByUrl('/');
   }
-  generateKeys() {
+  async generateKeys() {
+    debugger;
     const keypair = require('keypair');
-    const pair = keypair();
+    const pair = await keypair();
     this.generatedPublicKey = pair.public;
     this.generatedPrivateKey = pair.private;
     this.toastrService.success('Keys Generated');

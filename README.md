@@ -12,3 +12,4 @@ Idea Improvements:
 2. Client Utility/ Browser Extension that will manage the public and private keys
 3. Currency generated on the blockchain can be leveraged to pay the 3rd party services who use the SSO (not sure how though).
 4. We can also utilize the concept of "permissions" with our flow.
+5. We're skipping the step where the user fetches its data from the blockChain before encyrpting it with the public key of the 3rd party service.

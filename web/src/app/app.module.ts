@@ -44,7 +44,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-right',
+      progressBar: true
+    }),
     AppRoutingModule,
     TranslateModule.forRoot({
       loader: {
