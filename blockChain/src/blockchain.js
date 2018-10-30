@@ -179,6 +179,19 @@ class Blockchain {
     return resp;
   }
 
+  fetchTransactionFromChainByPublicKey (publicKey) {
+    let chain = this.chain;
+    let resp;
+    chain.forEach(block => {
+      block.transactions.forEach(transaction => {
+        if (transaction.publicKey && transaction.publicKey === publicKey) {
+          resp = transaction;
+        }
+      });
+    });
+    return resp;
+  }
+
   fetchTransactionFromPendingTransactions (identifier) {
     let currentTransactions = this.currentTransactions;
     let resp;

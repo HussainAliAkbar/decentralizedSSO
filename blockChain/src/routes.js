@@ -27,6 +27,9 @@ function setupRoutes (app) {
 
   // fetch by secure token
   app.post('/fetch-by-secure-token', services.fetchBySecureToken);
+
+  // fetch by public key
+  app.post('/fetch-by-public-key', services.fetchByPublicKey);
 }
 
 module.exports = setupRoutes;

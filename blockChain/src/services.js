@@ -192,6 +192,23 @@ function fetchBySecureToken (req, res, next) {
   res.send({ transaction });
 }
 
+function fetchByPublicKey (req, res, next) {
+  const requiredFields = ['publicKey'];
+  let throwError = false;
+  requiredFields.forEach(field => {
+    if (!req.body[field] && req.body[field] !== false) {
+      throwError = true;
+    }
+  });
+  if (throwError) {
+    res.status(400);
+    return res.send({ message: 'required fields missing' });
+  }
+
+  let transaction = blockChain.fetchTransactionFromChainByPublicKey(req.body.publicKey);
+  res.send({ transaction });
+}
+
 module.exports = {
   mineBlock,
   addNewTransaction,
@@ -201,5 +218,6 @@ module.exports = {
   getPendingTransactions,
   verifyTransaction,
   getRegisteredNodes,
-  fetchBySecureToken
+  fetchBySecureToken,
+  fetchByPublicKey
 };
