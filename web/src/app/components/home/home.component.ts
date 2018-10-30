@@ -42,15 +42,15 @@ export class HomeComponent implements OnInit {
     });
   }
   sendConsumerData() {
-    const consumerInformation = "{'firstName':'asad'}";
+    const consumerInformation = '{"firstName":"asad"}';
     const encryptedConsumerInfo = this.crypt.encrypt(consumerInformation, this.requestedTpsPublicKey).toString();
     const body = {
-      "transactionType": "serviceRegistration",
-      "publicKey": this.requestedTpsPublicKey,
-      "secureToken": this.requestedTpsSecureToken,
-      "encryptedData": encryptedConsumerInfo,
-      "broadcast": true
-    }
+      'transactionType': 'serviceRegistration',
+      'publicKey': this.requestedTpsPublicKey,
+      'secureToken': this.requestedTpsSecureToken,
+      'encryptedData': encryptedConsumerInfo,
+      'broadcast': true
+    };
     this.requestData = JSON.stringify(body);
     this.homeService.sendConsumerData(body).then((result) => {
       this.isDataSent = true;
@@ -62,8 +62,8 @@ export class HomeComponent implements OnInit {
   }
   signUp() {
     const secureToken = {
-      "secureToken": this.requestedTpsSecureToken
-    }
+      'secureToken': this.requestedTpsSecureToken
+    };
     this.signupRequestData = JSON.stringify(secureToken);
     this.homeService.consumerSignUp(secureToken).then(value => {
       this.toastrService.success('User signup success');

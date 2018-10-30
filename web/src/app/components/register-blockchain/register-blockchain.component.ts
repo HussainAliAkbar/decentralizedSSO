@@ -45,7 +45,6 @@ export class RegisterBlockchainComponent implements OnInit {
     this.router.navigateByUrl('/');
   }
   async generateKeys() {
-    debugger;
     const keypair = require('keypair');
     const pair = await keypair();
     this.generatedPublicKey = pair.public;
@@ -62,19 +61,17 @@ export class RegisterBlockchainComponent implements OnInit {
       city: this.registerationForm.get('city').value,
       state: this.registerationForm.get('state').value,
       country: this.registerationForm.get('country').value
-    }
+    };
     const userDetailsJson = JSON.stringify(userDetails);
     const encryptedBody = this.cryptography.encrypt(userDetailsJson, this.generatedPublicKey);
     const params = this.activatedRoute.queryParams.pipe(first()).toPromise();
-    debugger;
-    const userDetailsObject =
-    {
-      "transactionType": "accountCreation",
-      "accountType": params['accType'],
-      "publicKey": this.generatedPublicKey,
-      "encryptedData": encryptedBody.toString(),
-      "broadcast": true
-    }
+    const userDetailsObject = {
+      'transactionType': 'accountCreation',
+      'accountType': params['accType'],
+      'publicKey': this.generatedPublicKey,
+      'encryptedData': encryptedBody.toString(),
+      'broadcast': true
+    };
 
     this.registerBlockchainService.registerUser(JSON.stringify(userDetailsObject)).then(result => {
       this.toastrService.success('Success');
