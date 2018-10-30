@@ -23,6 +23,7 @@ import { RegisterBlockchainComponent } from './components/register-blockchain/re
 import { RequestInterceptor } from './components/services/http-config/http-interceptor';
 import { ShellComponent } from './components/shell/shell.component';
 import { ToastrModule } from 'ngx-toastr';
+import { Cryptography2Component } from './components/common/cryptography2/cryptography2.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -36,7 +37,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     WebviewDirective,
     CryptographyComponent,
     RegisterBlockchainComponent,
-    ShellComponent
+    ShellComponent,
+    Cryptography2Component
   ],
   imports: [
     BrowserModule,
@@ -57,7 +59,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })
   ],
-  providers: [ElectronService, CryptographyComponent,
+  providers: [ElectronService, CryptographyComponent,Cryptography2Component,
     HttpClient,
     {
       provide: HTTP_INTERCEPTORS,

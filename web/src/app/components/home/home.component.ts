@@ -1,3 +1,4 @@
+import { Cryptography2Component } from './../common/cryptography2/cryptography2.component';
 import { LocalStorage } from './../services/local-storage.service';
 import { ToastrService } from 'ngx-toastr';
 import { HomeService } from './home.service';
@@ -29,6 +30,7 @@ export class HomeComponent implements OnInit {
   signupResponseDecryptedData;
   constructor(
     private crypt: CryptographyComponent,
+    private cryptography2: Cryptography2Component,
     private homeService: HomeService,
     private toastrService: ToastrService,
     private localStorage: LocalStorage
@@ -36,7 +38,12 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  encrypt() {
+   this.encryptedPublicKey = this.cryptography2.encrypt(this.plainText,this.localStorage.getItem('servicePublicKey'))
+  }
+  decrypt() {
+   this.decryptedPublicKey = this.cryptography2.decrypt(this.cipherText,this.localStorage.getItem('servicePrivateKey'));
+  }
   requestSecureToken() {
     this.homeService.getSecureToken().then((result) => {
       this.requestedTpsSecureToken = result.data.token;
@@ -48,7 +55,7 @@ export class HomeComponent implements OnInit {
   }
   sendConsumerData() {
     // const consumerInformation = '{"firstName":"asad"}';
-    const encryptedConsumerInfo = this.crypt.encrypt(this.responseConsumerDecryptedData,
+    const encryptedConsumerInfo = this.cryptography2.encrypt(this.responseConsumerDecryptedData,
       this.requestedTpsPublicKey).toString();
     const body = {
       'transactionType': 'serviceRegistration',
@@ -76,7 +83,7 @@ export class HomeComponent implements OnInit {
       this.responseConsumerDataObject = JSON.stringify(result.data);
       this.toastrService.success('Success');
       debugger;
-      this.responseConsumerDecryptedData = this.crypt.decrypt(result.data.transaction.encryptedData,
+      this.responseConsumerDecryptedData = this.cryptography2.decrypt(result.data.transaction.encryptedData,
         this.localStorage.getItem('consumerPrivateKey'));
     }).catch(err => {
       this.toastrService.error(err.error.errors[0].message);
@@ -93,7 +100,7 @@ export class HomeComponent implements OnInit {
       this.signupResponseData = JSON.stringify(value.data);
       debugger;
       const s = value.data.transaction.encryptedData;
-      this.signupResponseDecryptedData = this.crypt.decrypt(value.data.transaction.encryptedData,
+      this.signupResponseDecryptedData = this.cryptography2.decrypt(value.data.transaction.encryptedData,
         this.localStorage.getItem('servicePrivateKey'));
     }).catch(err => {
       this.toastrService.error(err);

@@ -19,7 +19,7 @@ export class HomeService {
 
   consumerSignUp(secureToken: any): Promise<any> {
     // http://192.168.100.20:3000/
-    return this.http.post(':4001/sign-up', JSON.stringify(secureToken)).toPromise<any>();
+    return this.http.post(':4000/sign-up', JSON.stringify(secureToken)).toPromise<any>();
   }
   requestConsumerData(publicKeyObject: any): Promise<any> {
     return this.http.post(':3000/fetch-by-public-key', JSON.stringify(publicKeyObject)).toPromise<any>();

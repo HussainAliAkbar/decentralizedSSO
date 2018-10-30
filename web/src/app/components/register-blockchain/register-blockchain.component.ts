@@ -1,3 +1,4 @@
+import { Cryptography2Component } from './../common/cryptography2/cryptography2.component';
 import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -21,6 +22,7 @@ export class RegisterBlockchainComponent implements OnInit {
   generatedPrivateKey: string;
   constructor(private formBuilder: FormBuilder,
     private cryptography: CryptographyComponent,
+    private cryptography2: Cryptography2Component,
     private registerBlockchainService: RegisterBlockchainService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -52,12 +54,13 @@ export class RegisterBlockchainComponent implements OnInit {
     const pair = await keypair();
     this.generatedPublicKey = pair.public;
     this.generatedPrivateKey = pair.private;
-    debugger;
     if (params['__zone_symbol__value'].accType === 'consumer') {
       this.localStorage.setItem('consumerPublicKey', pair.public)
       this.localStorage.setItem('consumerPrivateKey', pair.private)
     }
     if (params['__zone_symbol__value'].accType === 'service') {
+      // const s = this.cryptography2.encrypt("asad",pair.private);
+      // const g = this.cryptography2.decrypt(s,pair.private);
       this.localStorage.setItem('servicePublicKey', pair.public)
       this.localStorage.setItem('servicePrivateKey', pair.private)
     }
@@ -75,8 +78,9 @@ export class RegisterBlockchainComponent implements OnInit {
       state: this.registerationForm.get('state').value,
       country: this.registerationForm.get('country').value
     };
+    debugger;
     const userDetailsJson = JSON.stringify(userDetails);
-    const encryptedBody = this.cryptography.encrypt(userDetailsJson, this.generatedPublicKey);
+    const encryptedBody = this.cryptography2.encrypt(userDetailsJson, this.generatedPublicKey);
     const params = this.activatedRoute.queryParams.pipe(first()).toPromise();
     const userDetailsObject = {
       'transactionType': 'accountCreation',
