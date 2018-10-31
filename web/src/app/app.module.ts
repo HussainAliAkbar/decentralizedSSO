@@ -14,10 +14,6 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { ElectronService } from './providers/electron.service';
-import {MatButtonModule, MatCheckboxModule} from '@angular/material';
-import { MatRadioModule ,MatSelectModule, MatIconModule, MatTabsModule, MatMenuModule} from '@angular/material';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-
 import { WebviewDirective } from './directives/webview.directive';
 
 import { AppComponent } from './app.component';
@@ -26,6 +22,8 @@ import { CryptographyComponent } from './components/common/cryptography/cryptogr
 import { RegisterBlockchainComponent } from './components/register-blockchain/register-blockchain.component';
 import { RequestInterceptor } from './components/services/http-config/http-interceptor';
 import { ShellComponent } from './components/shell/shell.component';
+import { ToastrModule } from 'ngx-toastr';
+import { Cryptography2Component } from './components/common/cryptography2/cryptography2.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -39,7 +37,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     WebviewDirective,
     CryptographyComponent,
     RegisterBlockchainComponent,
-    ShellComponent
+    ShellComponent,
+    Cryptography2Component
   ],
   imports: [
     BrowserModule,
@@ -47,14 +46,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
-    MatButtonModule,
-    MatIconModule,
-    MatMenuModule,
-    MatTabsModule,
-    MatCheckboxModule,
-    MatSelectModule,
-    NoopAnimationsModule,
-    MatRadioModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-right',
+      progressBar: true
+    }),
     AppRoutingModule,
     TranslateModule.forRoot({
       loader: {
@@ -64,7 +59,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })
   ],
-  providers: [ElectronService, CryptographyComponent,
+  providers: [ElectronService, CryptographyComponent,Cryptography2Component,
     HttpClient,
     {
       provide: HTTP_INTERCEPTORS,

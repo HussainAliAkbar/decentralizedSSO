@@ -1,3 +1,5 @@
+import { Cryptography2Component } from './../common/cryptography2/cryptography2.component';
+import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CryptographyComponent } from '../common/cryptography/cryptography.component';
@@ -5,6 +7,7 @@ import { UserDetails } from './RegisterBlockchain';
 import { RegisterBlockchainService } from './register-blockchain.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
+import { LocalStorage } from '../services/local-storage.service';
 
 @Component({
   selector: 'app-register-blockchain',
@@ -19,9 +22,13 @@ export class RegisterBlockchainComponent implements OnInit {
   generatedPrivateKey: string;
   constructor(private formBuilder: FormBuilder,
     private cryptography: CryptographyComponent,
+    private cryptography2: Cryptography2Component,
     private registerBlockchainService: RegisterBlockchainService,
     private router: Router,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute,
+    private toastrService: ToastrService,
+    private localStorage: LocalStorage
+  ) { }
 
   ngOnInit() {
     this.initializeForm();
@@ -41,12 +48,25 @@ export class RegisterBlockchainComponent implements OnInit {
   goBack() {
     this.router.navigateByUrl('/');
   }
-  generateKeys() {
+  async generateKeys() {
+    const params = this.activatedRoute.queryParams.pipe(first()).toPromise();
     const keypair = require('keypair');
-    const pair = keypair();
+    const pair = await keypair();
     this.generatedPublicKey = pair.public;
     this.generatedPrivateKey = pair.private;
+    if (params['__zone_symbol__value'].accType === 'consumer') {
+      this.localStorage.setItem('consumerPublicKey', pair.public)
+      this.localStorage.setItem('consumerPrivateKey', pair.private)
+    }
+    if (params['__zone_symbol__value'].accType === 'service') {
+      // const s = this.cryptography2.encrypt("asad",pair.private);
+      // const g = this.cryptography2.decrypt(s,pair.private);
+      this.localStorage.setItem('servicePublicKey', pair.public)
+      this.localStorage.setItem('servicePrivateKey', pair.private)
+    }
+    this.toastrService.success('Keys Generated');
   }
+
   saveForm() {
     const userDetails: UserDetails = {
       firstName: this.registerationForm.get('firstName').value,
@@ -57,20 +77,23 @@ export class RegisterBlockchainComponent implements OnInit {
       city: this.registerationForm.get('city').value,
       state: this.registerationForm.get('state').value,
       country: this.registerationForm.get('country').value
-    }
-    const userDetailsJson = JSON.stringify(userDetails);
-    const encryptedBody = this.cryptography.encrypt(userDetailsJson, this.generatedPublicKey);
-    const params = this.activatedRoute.queryParams.pipe(first()).toPromise();
+    };
     debugger;
-    const userDetailsObject =
-    {
-      "transactionType": "accountCreation",
-      "accountType": params['accType'],
-      "publicKey": this.generatedPublicKey,
-      "encryptedData": encryptedBody.toString(),
-      "broadcast": true
-    }
-
-    this.registerBlockchainService.registerUser(JSON.stringify(userDetailsObject));
+    const userDetailsJson = JSON.stringify(userDetails);
+    const encryptedBody = this.cryptography2.encrypt(userDetailsJson, this.generatedPublicKey);
+    const params = this.activatedRoute.queryParams.pipe(first()).toPromise();
+    const userDetailsObject = {
+      'transactionType': 'accountCreation',
+      'accountType': params['__zone_symbol__value'].accType,
+      'publicKey': this.generatedPublicKey,
+      'encryptedData': encryptedBody.toString(),
+      'broadcast': true
+    };
+    debugger;
+    this.registerBlockchainService.registerUser(JSON.stringify(userDetailsObject)).then(result => {
+      this.toastrService.success('Success');
+    }).catch(err => {
+      this.toastrService.error(err);
+    });
   }
 }

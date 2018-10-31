@@ -1,4 +1,4 @@
-<!-- <div>
+<div>
   <input type="text" name="plainText" class="form-control" id="plainText" placeholder="Enter plain text." [(ngModel)]="plainText">
   <button (click)="encrypt()">Encrypt</button>
   Encrypted :
@@ -10,7 +10,7 @@
   <button (click)="decrypt()">Decrypt</button>
   Decrypted :
   <span>{{decryptedPublicKey}}</span>
-</div> -->
+</div>
 <div class="container">
   <div class="mt-4">
     <div class="card">
@@ -25,6 +25,26 @@
       </div>
     </div>
   </div>
+
+  <div class="mt-4">
+    <div class="card">
+      <div class="card-body">
+        <p class="h4">Request encrypted consumer information from blockchain service with the public key of the consumer
+        </p>
+        <button (click)="requestConsumerData()" class="btn btn-outline-primary mt-2" [disabled]="false">Request Consumer Data</button>
+        <!-- <span class="error ml-2 mt-2" *ngIf="!requestedTpsSecureToken && !requestedTpsPublicKey">*Button disabled till secure token and public key are populated</span> -->
+        <p class="h6 mt-4"> Request Data</p>
+        <textarea class="form-control" style="height: 150px" readonly>{{requestConsumerDataObject}}</textarea>
+        <p class="h6">Response Data</p>
+        <textarea class="form-control" style="height: 150px" readonly>{{responseConsumerDataObject}}
+              </textarea>
+        <p class="h6">Decrypted Data</p>
+        <textarea class="form-control" style="height: 150px" readonly>{{responseConsumerDecryptedData}}
+                  </textarea>
+      </div>
+    </div>
+  </div>
+
   <div class="mt-4">
     <div class="card">
       <div class="card-body">
@@ -32,6 +52,11 @@
         </p>
         <button (click)="sendConsumerData()" class="btn btn-outline-primary mt-2" [disabled]="!requestedTpsSecureToken && !requestedTpsPublicKey">Send Consumer Data</button>
         <span class="error ml-2 mt-2" *ngIf="!requestedTpsSecureToken && !requestedTpsPublicKey">*Button disabled till secure token and public key are populated</span>
+        <p class="h6 mt-4"> Request Data</p>
+        <textarea class="form-control" style="height: 150px" readonly>{{requestData}}</textarea>
+        <p class="h6">Response Data</p>
+        <textarea class="form-control" style="height: 150px" readonly>{{responseData}}
+          </textarea>
       </div>
     </div>
   </div>
@@ -42,6 +67,14 @@
         <p class="h4">Sign Up to the third party service (send secure token to the third party service) </p>
         <button (click)="signUp()" class="btn btn-outline-primary mt-2" [disabled]="!isDataSent">Sign Up</button>
         <span class="error ml-2 mt-2" *ngIf="!isDataSent">*Button disabled till consumer data is sent to the server</span>
+        <p class="h6 mt-4"> Request Data</p>
+        <textarea class="form-control" style="height: 150px" readonly>{{signupRequestData}}</textarea>
+        <p class="h6">Response Data</p>
+        <textarea class="form-control" style="height: 150px" readonly>{{signupResponseData}}
+          </textarea>
+        <p class="h6">Decrypted Data</p>
+        <textarea class="form-control" readonly>{{signupResponseDecryptedData}}
+            </textarea>
       </div>
     </div>
   </div>

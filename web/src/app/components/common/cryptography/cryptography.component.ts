@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cryptography.component.scss']
 })
 export class CryptographyComponent implements OnInit {
-  CryptoTS = require("crypto-ts");
+  CryptoTS = require('crypto-ts');
 
   constructor() { }
   ngOnInit() {
@@ -14,13 +14,13 @@ export class CryptographyComponent implements OnInit {
 
   encrypt(plainText: string, publicKey: string): string {
     // Encrypt
-    var ciphertext = this.CryptoTS.AES.encrypt(plainText, publicKey);
+    const ciphertext = this.CryptoTS.AES.encrypt(plainText, publicKey);
     return ciphertext;
   }
-  decrypt(ciphertext: string) {
+  decrypt(ciphertext: string, privateKey: string) {
     // Decrypt
-    var bytes = this.CryptoTS.AES.decrypt(ciphertext.toString(), 'secret key 123');
-    var plaintext = bytes.toString(this.CryptoTS.enc.Utf8);
+    const bytes = this.CryptoTS.AES.decrypt(ciphertext.toString(), privateKey);
+    const plaintext = bytes.toString(this.CryptoTS.enc.Utf8);
     return plaintext;
   }
 }
