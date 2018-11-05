@@ -28,3 +28,5 @@ Idea Improvements:
 3. Currency generated on the blockchain can be leveraged to pay the 3rd party services who use the SSO (not sure how though).
 4. We can also utilize the concept of "permissions" with our flow.
 5. Decryption should be done on the server.
+6. Implement mechanism to restrict users from creating multiple identities.
+7. A one time verification process during the account creation process to verify that the person who's registering is in fact the person that they're claiming to be! (like: cex.io)
