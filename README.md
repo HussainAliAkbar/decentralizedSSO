@@ -1,3 +1,17 @@
+Project Structure
+
+There are 3 projects in this repository:
+1. Root Directory contains the code for the 3rd party service.
+2. Web Directory contains the code for the frontend.
+3. Blockchain Directory contains the code for the Blockchain service.
+
+Project Setup
+
+1. run "npm install" in all the 3 projects separately.
+2. run the 3rd party service project with "npm start".
+3. run the web project with "npm start".
+4. run the Blockchain project with "docker-compose up" (Docker and Docker-compose).
+
 Code Improvements:
 
 1. Automate the mining and consensus protocols so that they do not need to be performed manually.
