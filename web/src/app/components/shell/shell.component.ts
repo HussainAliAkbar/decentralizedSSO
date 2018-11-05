@@ -13,6 +13,6 @@ export class ShellComponent implements OnInit {
   ngOnInit() {
   }
   navigateRegister(param: string) {
-    this.router.navigateByUrl(`register?accType=${param}`);
+    this.router.navigateByUrl(`register/${param}?accType=${param}`);
   }
 }

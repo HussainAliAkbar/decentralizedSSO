@@ -20,6 +20,7 @@ export class RegisterBlockchainComponent implements OnInit {
   tpsPublicKey;
   generatedPublicKey: string;
   generatedPrivateKey: string;
+  registerationType: string;
   constructor(private formBuilder: FormBuilder,
     private cryptography: CryptographyComponent,
     private cryptography2: Cryptography2Component,
@@ -31,6 +32,12 @@ export class RegisterBlockchainComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    const params = this.activatedRoute.queryParams.pipe(first()).toPromise();
+    if (params['__zone_symbol__value'].accType === 'consumer') {
+      this.registerationType = 'Consumer Registeration';
+    } else {
+      this.registerationType = 'Service Registeration';
+    }
     this.initializeForm();
   }
   initializeForm() {

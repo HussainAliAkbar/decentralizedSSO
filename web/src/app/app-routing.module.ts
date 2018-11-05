@@ -10,7 +10,10 @@ const routes: Routes = [
     },
     {
         path: 'register',
-        component: RegisterBlockchainComponent
+        children: [
+            { path: 'service', component: RegisterBlockchainComponent },
+            { path: 'consumer', component: RegisterBlockchainComponent },
+        ]
     }
 ];
 
